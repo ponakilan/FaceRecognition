@@ -1,0 +1,6 @@
+test
+face_dist_model.pt
+.venv
+**/__pycache__/**
+models/TrainedWeights
+.idea
