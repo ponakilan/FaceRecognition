@@ -2,5 +2,6 @@ test
 face_dist_model.pt
 .venv
 **/__pycache__/**
-models/TrainedWeights
+models/TrainedWeights/vggface2.pt
+models/TrainedWeights/casia-webface.pt
 .idea
