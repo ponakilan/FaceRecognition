@@ -140,7 +140,7 @@ class ONet(nn.Module):
 class MTCNN(nn.Module):
     def __init__(
         self, min_face_size=20,
-        thresholds=(0.6, 0.7, 0.8), factor=0.709,
+        thresholds=(0.6, 0.7, 0.7), factor=0.709,
         select_largest=True, weights_path=None,
         transform=None, device=None
     ):
