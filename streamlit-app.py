@@ -9,7 +9,7 @@ st.title("Detect Faces")
 min_face_size = st.slider("Minimum face size", min_value=1, max_value=30, step=1, value=20)
 
 model = MTCNN(
-    weights_path="D:\\PycharmProjects\\FaceRecognition\\models\\TrainedWeights",
+    weights_path="models/TrainedWeights",
     min_face_size=min_face_size
 )
 

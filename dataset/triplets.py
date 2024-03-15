@@ -136,10 +136,10 @@ class TripletFaceDataset(Dataset):
             respectively.
     """
 
-    def __init__(self, triplets_dataframe, transform):
+    def __init__(self, triplets_dataframe, weights_path, transform):
         self.dataframe = triplets_dataframe
         self.mtcnn = MTCNN(
-            weights_path="models\TrainedWeights",
+            weights_path=weights_path,
             transform=transform
         )
 
