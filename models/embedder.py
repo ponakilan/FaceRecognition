@@ -108,8 +108,9 @@ class Block8(nn.Module):
         )
 
         self.conv2d = nn.Conv2d(384, 1792, kernel_size=1, stride=1)
-        if not self.noReLU:
-            self.relu = nn.ReLU(inplace=False)
+        # if not self.noReLU:
+        #     self.relu = nn.ReLU(inplace=False)
+        self.relu = nn.ReLU(inplace=False)
 
     def forward(self, x):
         x0 = self.branch0(x)
@@ -179,11 +180,10 @@ class Mixed_7a(nn.Module):
 
 class InceptionResnetEmbedding(nn.Module):
 
-    def __init__(self, weights=None, weights_path=None, distance_metric=0, dropout_prob=0.6, device=None):
+    def __init__(self, weights=None, weights_path=None, dropout_prob=0.6, device=None):
         super().__init__()
 
         self.weights = weights
-        self.distance_metric = distance_metric
 
         if weights == 'vggface2':
             tmp_classes = 8631
@@ -242,7 +242,7 @@ class InceptionResnetEmbedding(nn.Module):
             self.device = device
             self.to(device)
 
-    def get_embedding(self, x):
+    def forward(self, x):
         x = self.conv2d_1a(x)
         x = self.conv2d_2a(x)
         x = self.conv2d_2b(x)
@@ -260,29 +260,8 @@ class InceptionResnetEmbedding(nn.Module):
         x = self.dropout(x)
         x = self.last_linear(x.view(x.shape[0], -1))
         x = self.last_bn(x)
-        x = F.normalize(x, p=2, dim=1)
+        x = F.normalize(x, p=2., dim=1)
         return x
-
-    def forward(self, img1, img2):
-        # Get the embeddings
-        embeddings1 = self.get_embedding(img1).detach().numpy()
-        embeddings2 = self.get_embedding(img2).detach().numpy()
-
-        # Calculate the distance
-        if self.distance_metric == 0:
-            # Euclidian distance
-            diff = np.subtract(embeddings1, embeddings2)
-            dist = np.sum(np.square(diff), 1)
-        elif self.distance_metric == 1:
-            # Distance based on cosine similarity
-            dot = np.sum(np.multiply(embeddings1, embeddings2), axis=1)
-            norm = np.linalg.norm(embeddings1, axis=1) * np.linalg.norm(embeddings2, axis=1)
-            similarity = dot / norm
-            dist = np.arccos(similarity) / math.pi
-        else:
-            raise 'Undefined distance metric %d' % self.distance_metric
-
-        return dist
 
 
 def load_weights(mdl, name, weights_path):
