@@ -139,7 +139,7 @@ class TripletFaceDataset(Dataset):
     def __init__(self, triplets_dataframe, transform):
         self.dataframe = triplets_dataframe
         self.mtcnn = MTCNN(
-            weights_path="D:\PycharmProjects\FaceRecognition\models\TrainedWeights",
+            weights_path="models\TrainedWeights",
             transform=transform
         )
 
