@@ -160,8 +160,21 @@ class MTCNN(nn.Module):
             self.device = device
             self.to(device)
 
+    def postprocess_faces(self, img, batch_boxes, batch_probs):
+        faces = []
+        face_tensors = []
+        if self.transform and batch_probs is not None:
+            for i, box in enumerate(batch_boxes):
+                if batch_probs[i] >= 0.9:
+                    face = img.crop(box)
+                    faces.append(face)
+                    face = self.transform(face)
+                    face_tensors.append(face)
+        return faces, face_tensors
+
     def forward(self, img):
         batch_boxes, batch_probs = self.detect(img)
+        # return self.postprocess_faces(img, batch_boxes, batch_probs)
         return batch_boxes, batch_probs
 
     def detect(self, img):
@@ -198,11 +211,12 @@ class MTCNN(nn.Module):
         points = np.array(points, dtype=object)
 
         if (
-            not isinstance(img, (list, tuple)) and 
+            not isinstance(img, (list, tuple)) and
             not (isinstance(img, np.ndarray) and len(img.shape) == 4) and
             not (isinstance(img, torch.Tensor) and len(img.shape) == 4)
         ):
-            boxes = boxes
-            probs = probs
+            boxes = boxes[0]
+            probs = probs[0]
+            points = points[0]
 
         return boxes, probs

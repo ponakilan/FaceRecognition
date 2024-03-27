@@ -3,7 +3,6 @@ import random
 
 import pandas as pd
 from torch.utils.data import Dataset
-import torchvision
 from models.mtcnn import MTCNN
 from PIL import Image
 
@@ -137,7 +136,7 @@ class TripletFaceDataset(Dataset):
             respectively.
     """
 
-    def __init__(self, triplets_dataframe: pd.DataFrame, weights_path: str, transform: torchvision.transforms):
+    def __init__(self, triplets_dataframe, weights_path, transform):
         self.dataframe = triplets_dataframe
         self.mtcnn = MTCNN(
             weights_path=weights_path,
