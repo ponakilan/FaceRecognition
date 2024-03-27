@@ -5,3 +5,4 @@ face_dist_model.pt
 models/TrainedWeights/vggface2.pt
 models/TrainedWeights/casia-webface.pt
 .idea
+.ipynb_checkpoints
