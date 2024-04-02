@@ -5,12 +5,14 @@ from .embedder import InceptionResnetEmbedding
 
 
 class SiameseNetwork(nn.Module):
-    def __init__(self):
+    def __init__(self, pretrained=False):
         super(SiameseNetwork, self).__init__()
-        self.encoder = InceptionResnetEmbedding(
-            weights='vggface2',
-            weights_path='models/TrainedWeights'
-        )
+        self.encoder = InceptionResnetEmbedding()
+        if pretrained:
+            self.encoder = InceptionResnetEmbedding(
+                weights='vggface2',
+                weights_path='models/TrainedWeights'
+            )
         self.fc1 = nn.Linear(1024, 256)
         self.fc2 = nn.Linear(256, 128)
         self.fc3 = nn.Linear(128, 64)
