@@ -16,8 +16,6 @@ class InceptionResnetEmbedding(nn.Module):
             tmp_classes = 8631
         elif weights == 'casia-webface':
             tmp_classes = 10575
-        else:
-            raise Exception('Invalid weights')
 
         self.conv2d_1a = BasicConv2d(3, 32, kernel_size=3, stride=2)
         self.conv2d_2a = BasicConv2d(32, 32, kernel_size=3, stride=1)
