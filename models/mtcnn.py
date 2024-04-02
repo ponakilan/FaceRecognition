@@ -44,8 +44,8 @@ class MTCNN(nn.Module):
 
     def forward(self, img):
         batch_boxes, batch_probs = self.detect(img)
-        # return self.postprocess_faces(img, batch_boxes, batch_probs)
-        return batch_boxes, batch_probs
+        return self.postprocess_faces(img, batch_boxes, batch_probs)
+        # return batch_boxes, batch_probs
 
     def detect(self, img):
 
