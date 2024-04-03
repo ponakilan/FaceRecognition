@@ -19,10 +19,8 @@ class SiameseNetwork(nn.Module):
         self.fc4 = nn.Linear(64, 1)
 
     def forward(self, x, y):
-        x = self.encoder(x)
-        y = self.encoder(y)
-        x = torch.cat((x, y), dim=1)
-        x = torch.flatten(x)
+        embeddings = torch.cat([x, y], dim=1)
+        x = torch.flatten(embeddings, start_dim=1)
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
         x = torch.relu(self.fc3(x))
