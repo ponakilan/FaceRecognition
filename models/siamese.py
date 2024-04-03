@@ -22,7 +22,7 @@ class SiameseNetwork(nn.Module):
         cat = torch.cat([x, y], dim=0)
         print(cat.shape)
         embeddings = self.encoder(cat)
-        x = torch.flatten(embeddings, start_dim=1)
+        x = embeddings.reshape((1, 1024))
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
         x = torch.relu(self.fc3(x))
