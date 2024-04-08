@@ -1,6 +1,6 @@
 import io
 
-from models.mtcnn import MTCNN
+from models.facerec import MTCNN
 from PIL import Image, ImageDraw
 import streamlit as st
 from io import BytesIO

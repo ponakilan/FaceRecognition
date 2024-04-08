@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "exploremathematica-154bd",
+  "private_key_id": "4ec97fa9e5356bd4bb2ae6268dcf67bd6a45a2f1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC2DOFdFsByXAx+\nRJqEl0wKkZsaNfJ31lteBbz3n0CUQdNu/857cgKu1ok2baZfwXMkqC7FogJsos94\nrymrw5/to19wd7dhKffsnvGp4pey8K/E6a2QQHh5EdHqa061duvS53vONde6Mvu2\nYKFCyREq2pTlq78/XXtTWsXRRzv52+npKIT/qPdSqz/2UOzNALfcFgblBGPWMn+5\njwYNScySTTPc9RnWg5vXJM+nyaWTks943gay3LwUGtYq9MVO5fkBlgWCUqVK2KK0\nC6NLvAeeGxdfYsJ3VIToNtCQt4s5s+89euVIG5XPgX2w6cqnIcFBNpIOHwhf3Jvx\nGvPcnoOnAgMBAAECggEAUtHIQrejhEMhAd6G5xQHaXV1OLbbIC558Wut3H7r+6Z4\noDIqxtkGpHCACq1Wd5CDp+UFJi6+aJqmxRH25KfB3XOp6vnjiIX1voVOjolBlwvN\nAsmGBq51wCpds4Xu0DoSLafWmGjBQ/mGrqEGK+JZ94NqIpQAFL0b6j9M6Bi+jbt7\n9M4mKz7N1hUl4AmrJlhl/HnpWgXDioan+NEhcET5jHIECBnQLmvJm5ZKVohffp/u\nJIa1sbDXav0FulUrfLM/45+A0uumrDtCiOhI+wfscAeV+ZzgzKica8Ep6uDTDN2T\n4RVvxw453JItGFspnF1VGJ2v5dWbJRGgnO1O63OezQKBgQDhLqDEQlwY1zkd/7B8\n9aumIuQ8B/4zJ6f5RAEhDkTX4UOvzYtcFXf5Eb53KWRJm67rbDy8FkfBn3E/7iBk\nSdJyGpOUaxVhK4iPqSZmpfe80+b4L3y3WlX7rO+jvtdnUhvXAT9jNxGaw4/SSK7V\nh2/tbGaRAgvCTINx85JHd/CRnQKBgQDO9xtLLeckBBygBxc+4rEVM7X2+yLCzZi1\nxC7/2vlqz7hf1CsE7eNpl0LxyelnxlEuS+nMMc4do9qdDnWhGxGBDCsQiX2SxmWJ\nxRosVbvHav4pD05Ii2Y5nXVzPJtm+LtFamlt8cABSDqfaWDwmlJ5vRlCUizCKBG9\nlhXV6Ar5EwKBgQCBay0W3xTTag73wNaMWx3WFEOchPOCLw6JYp5Lg0np0Rv31Gh9\n+hDD44DWN8Hd1E5KHCEj8KI5FAwgtBmFyi/bSI79RDY7bKvF9W+Om2Cw9BDRH2nM\nb2zvgssQD0T5quU5QwxNV38UtcTZFND3BCo+CIlCWiyr9RGu0lCGJtbquQKBgQCv\nSzRe1J41LxZfpCHYLYD3CDlS2xpyDFkPev6jzf/6q7zpzXYyUpqO0ILu76k1MA+K\nOtnnDTgaerGq3Jhcv+RvfLLs6sblDgzqR3sHmgXVvZVPiZswboFCw067L9YfvQRA\nowRxDpUlgNvGMSbeIpdAbR17wsYOHIoKHZiY+FRy6QKBgQCV0ROM4otGHUTqZ1Fl\nB47TQzXf01KwNOLkSQvVrzISD+sF9JLWYDdGJETnzBU4e++SDRuiONEiEzFH3rAo\nTV8p2+HPuBQcfo+4VoM2r/EwXgKCA1Zkh4kpkgdNj+hZChfizOUP7zXOgZt6o3mY\nf0wy9evToQNQB7X/vVu7ISBHrg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-f3i0q@exploremathematica-154bd.iam.gserviceaccount.com",
+  "client_id": "105121245859656300749",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-f3i0q%40exploremathematica-154bd.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

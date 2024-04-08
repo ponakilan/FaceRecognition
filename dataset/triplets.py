@@ -4,7 +4,7 @@ import random
 import pandas as pd
 from torch.utils.data import Dataset
 import torchvision
-from models.mtcnn import MTCNN
+from models.facerec import MTCNN
 from PIL import Image
 
 
