@@ -35,7 +35,7 @@ class MTCNN(nn.Module):
         face_tensors = []
         if self.transform and batch_boxes is not None:
             for i, box in enumerate(batch_boxes):
-                if batch_probs[i] >= 0.9:
+                if batch_probs[i] >= 0.6:
                     face = img.crop(box)
                     faces.append(face)
                     face = self.transform(face)
