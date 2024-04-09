@@ -1,10 +1,11 @@
 import torch
 from torch import nn
+import lightning as L
 
 from .embedder import InceptionResnetEmbedding
 
 
-class SiameseNetwork(nn.Module):
+class SiameseNetwork(L.LightningModule):
     def __init__(self, pretrained=False):
         super(SiameseNetwork, self).__init__()
         self.encoder = InceptionResnetEmbedding()
@@ -20,7 +21,6 @@ class SiameseNetwork(nn.Module):
 
     def forward(self, x, y):
         cat = torch.cat([x, y], dim=0)
-        print(cat.shape)
         embeddings = self.encoder(cat)
         x = embeddings.reshape((1, 1024))
         x = torch.relu(self.fc1(x))

@@ -54,7 +54,7 @@ class AutoEncoder(L.LightningModule):
         return x
 
     def training_step(self, batch, batch_idx):
-        x, y = batch
+        x, _ = batch
         z = self.encoder(x)
         x_hat = self.decoder(z)
         loss = F.mse_loss(x_hat, x)

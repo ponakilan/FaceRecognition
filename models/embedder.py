@@ -1,11 +1,12 @@
 import torch
 from torch import nn
 from torch.nn import functional as F
+import lightning as L
 
 from networks.inceptionv1 import BasicConv2d, Block35, Block17, Mixed_6a, Mixed_7a, Block8
 
 
-class InceptionResnetEmbedding(nn.Module):
+class InceptionResnetEmbedding(L.LightningModule):
 
     def __init__(self, weights=None, weights_path=None, dropout_prob=0.6, device=None):
         super().__init__()
@@ -87,6 +88,19 @@ class InceptionResnetEmbedding(nn.Module):
         x = self.last_bn(x)
         x = F.normalize(x, p=2., dim=1)
         return x
+    
+    def training_step(self, batch, batch_idx):
+        anchor, positive, negative = batch
+        a_e = self.forward(anchor)
+        p_e = self.forward(positive)
+        n_e = self.forward(negative)
+        loss = F.triplet_margin_loss(a_e, p_e, n_e)
+        self.log("train_loss", loss)
+        return loss
+    
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+        return optimizer
 
 
 def load_weights(mdl, name, weights_path):
