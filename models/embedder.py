@@ -8,7 +8,7 @@ from networks.inceptionv1 import BasicConv2d, Block35, Block17, Mixed_6a, Mixed_
 
 class InceptionResnetEmbedding(L.LightningModule):
 
-    def __init__(self, weights=None, weights_path=None, dropout_prob=0.6, device=None):
+    def __init__(self, weights=None, weights_path=None, dropout_prob=0.6):
         super().__init__()
 
         self.weights = weights
@@ -62,11 +62,6 @@ class InceptionResnetEmbedding(L.LightningModule):
         if weights is not None:
             self.logits = nn.Linear(512, tmp_classes)
             load_weights(self, weights, weights_path)
-
-        self.device = torch.device('cpu')
-        if device is not None:
-            self.device = device
-            self.to(device)
 
     def forward(self, x):
         x = self.conv2d_1a(x)
