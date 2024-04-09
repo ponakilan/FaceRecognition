@@ -33,13 +33,16 @@ class MTCNN(nn.Module):
     def postprocess_faces(self, img, batch_boxes, batch_probs):
         faces = []
         face_tensors = []
-        if self.transform and batch_probs is not None:
+        if self.transform and batch_boxes is not None:
             for i, box in enumerate(batch_boxes):
                 if batch_probs[i] >= 0.9:
                     face = img.crop(box)
                     faces.append(face)
                     face = self.transform(face)
                     face_tensors.append(face)
+        else:
+            faces.append(img)
+            face_tensors.append(self.transform(img))
         return faces, face_tensors
 
     def forward(self, img):
