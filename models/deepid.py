@@ -58,7 +58,7 @@ class ImageEmbeddingModel(L.LightningModule):
         x1 = self.pool(F.relu(self.conv3(x1)))
         x1 = self.dropout_dynamic(x1)
 
-        x2 = F.relu(self.conv4(x))
+        x2 = F.relu(self.conv4(x1))
         x2 = self.dropout_dynamic(x2)
        
         x1 = x1.view(x1.size(0), -1)
@@ -68,7 +68,7 @@ class ImageEmbeddingModel(L.LightningModule):
         x2 = self.linear2(x2)
 
         x = torch.cat((x1, x2), 1)
-        
+
         x = F.normalize(x)
         return x
     
