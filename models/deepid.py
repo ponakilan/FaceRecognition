@@ -68,6 +68,8 @@ class ImageEmbeddingModel(L.LightningModule):
         x2 = self.linear2(x2)
 
         x = torch.cat((x1, x2), 1)
+        
+        x = F.normalize(x)
         return x
     
     def training_step(self, batch, batch_idx):
