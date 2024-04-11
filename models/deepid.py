@@ -19,7 +19,7 @@ class ImageEmbeddingModel(L.LightningModule):
         self.conv3 = nn.Conv2d(in_channels=40, out_channels=60, kernel_size=3)
         self.conv4 = nn.Conv2d(in_channels=60, out_channels=80, kernel_size=2)
 
-        self.linear1 = nn.Linear(in_features=self._calculate_linear_input(47, 55), out_features=160)
+        self.linear1 = nn.Linear(in_features=1200, out_features=160)
         self.linear2 = nn.Linear(in_features=self._calculate_linear_input(47, 55), out_features=160)
 
     def _calculate_linear_input(self, h, w):
