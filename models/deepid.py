@@ -67,5 +67,3 @@ class ImageEmbeddingModel(nn.Module):
        
         x = torch.cat((x1, x2), 1)
         return x
-
-model = ImageEmbeddingModel(dynamic_dropout_prob=0.5)
