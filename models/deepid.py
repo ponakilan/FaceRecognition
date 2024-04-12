@@ -99,5 +99,5 @@ class ImageEmbeddingModel(L.LightningModule):
         self.run.log({"val_loss": loss})
     
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+        optimizer = torch.optim.SGD(self.parameters(), lr=1e-3)
         return optimizer
