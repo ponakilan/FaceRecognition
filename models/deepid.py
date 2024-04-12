@@ -21,33 +21,6 @@ class ImageEmbeddingModel(L.LightningModule):
 
         self.linear1 = nn.Linear(in_features=1200, out_features=160)
         self.linear2 = nn.Linear(in_features=960, out_features=160)
-
-    def _calculate_linear_input(self, h, w):
-       
-        def conv2d_size_out(size, kernel_size, stride=1):
-            return (size - (kernel_size - 1) - 1)         
-        def pool2d_size_out(size, kernel_size, stride):
-            return (size - (kernel_size - 1) - 1)         
-        
-        h = conv2d_size_out(h, 4)
-        w = conv2d_size_out(w, 4)
-        h = pool2d_size_out(h, 2, 2)
-        w = pool2d_size_out(w, 2, 2)
-        
-        h = conv2d_size_out(h, 3)
-        w = conv2d_size_out(w, 3)
-        h = pool2d_size_out(h, 2, 2)
-        w = pool2d_size_out(w, 2, 2)
-        
-        h = conv2d_size_out(h, 3)
-        w = conv2d_size_out(w, 3)
-        h = pool2d_size_out(h, 2, 2)
-        w = pool2d_size_out(w, 2, 2)
-        
-        h = conv2d_size_out(h, 2)
-        w = conv2d_size_out(w, 2)
-        
-        return h * w * 80  
     
     def forward(self, x):
        
@@ -79,6 +52,11 @@ class ImageEmbeddingModel(L.LightningModule):
         a_e = self.forward(anchor)
         p_e = self.forward(positive)
         n_e = self.forward(negative)
+
+        pos_dists = torch.norm(a_e - p_e, p=2, dim=1).detach().tolist()
+        neg_dists = torch.norm(a_e - n_e, p=2, dim=1).detach().tolist()
+        for i in range(len(pos_dists)):
+            self.run.log({"pos_dist": pos_dists[i], "neg_dist": neg_dists[i]})
 
         loss = F.triplet_margin_loss(a_e, p_e, n_e, 1.2)
         self.log("train_loss", loss, sync_dist=True)

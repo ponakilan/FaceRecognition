@@ -6,3 +6,5 @@ models/TrainedWeights/vggface2.pt
 models/TrainedWeights/casia-webface.pt
 .idea
 **/.ipynb_checkpoints/**
+wandb
+test.ipynb
