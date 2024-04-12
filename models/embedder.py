@@ -83,7 +83,7 @@ class InceptionResnetEmbedding(L.LightningModule):
         p_e = self.forward(positive)
         n_e = self.forward(negative)
 
-        loss = F.triplet_margin_loss(a_e, p_e, n_e, 1.2)
+        loss = F.triplet_margin_loss(a_e, p_e, n_e, 1.8)
 
         if batch_idx % 100 == 99:
             pos_dist = torch.norm(a_e - p_e, p=2, dim=1).detach().tolist()[0]
