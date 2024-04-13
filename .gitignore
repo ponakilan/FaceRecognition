@@ -9,3 +9,4 @@ models/TrainedWeights/casia-webface.pt
 wandb
 test.ipynb
 bringer-deepid.ipynb
+.ipynb_checkpoints

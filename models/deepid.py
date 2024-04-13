@@ -2,15 +2,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import lightning as L
+class ImageEmbeddingModel(nn.Module):
 
-class ImageEmbeddingModel(L.LightningModule):
-
-    def __init__(self, dynamic_dropout_prob, wandb_run):
+    def __init__(self, dynamic_dropout_prob):
 
         super(ImageEmbeddingModel, self).__init__()
-
-        self.run = wandb_run
 
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=20, kernel_size=4)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
@@ -45,37 +41,3 @@ class ImageEmbeddingModel(L.LightningModule):
         x = F.normalize(x)
         return x
     
-    def training_step(self, batch, batch_idx):
-
-        anchor, positive, negative = batch
-
-        a_e = self.forward(anchor)
-        p_e = self.forward(positive)
-        n_e = self.forward(negative)
-
-        pos_dists = torch.norm(a_e - p_e, p=2, dim=1).detach().tolist()
-        neg_dists = torch.norm(a_e - n_e, p=2, dim=1).detach().tolist()
-        for i in range(len(pos_dists)):
-            self.run.log({"pos_dist": pos_dists[i], "neg_dist": neg_dists[i]})
-
-        loss = F.triplet_margin_loss(a_e, p_e, n_e, 1.2)
-        self.log("train_loss", loss, sync_dist=True)
-        self.run.log({"train_loss": loss})
-
-        return loss
-    
-    def validation_step(self, batch, batch_idx):
-        
-        anchor, positive, negative = batch
-
-        a_e = self.forward(anchor)
-        p_e = self.forward(positive)
-        n_e = self.forward(negative)
-
-        loss = F.triplet_margin_loss(a_e, p_e, n_e, 1.2)
-        self.log("val_loss", loss, sync_dist=True)
-        self.run.log({"val_loss": loss})
-    
-    def configure_optimizers(self):
-        optimizer = torch.optim.SGD(self.parameters(), lr=1e-3)
-        return optimizer
