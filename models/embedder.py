@@ -1,7 +1,10 @@
+import os
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 
+from .utils.download import download_url_to_file
 from networks.inceptionv1 import BasicConv2d, Block35, Block17, Mixed_6a, Mixed_7a, Block8
 
 
@@ -50,6 +53,9 @@ class InceptionResnetEmbedding(nn.Module):
         self.dropout = nn.Dropout(dropout_prob)
         self.last_linear = nn.Linear(1792, 512, bias=False)
         self.last_bn = nn.BatchNorm1d(512, eps=0.001, momentum=0.1, affine=True)
+        self.logits = nn.Linear(512, 8631)
+        
+        load_weights(self)
 
     def forward(self, x):
         x = self.conv2d_1a(x)
@@ -72,3 +78,26 @@ class InceptionResnetEmbedding(nn.Module):
         x = F.normalize(x, p=2., dim=1)
         return x
     
+
+def load_weights(mdl):
+    path = 'https://github.com/timesler/facenet-pytorch/releases/download/v2.2.9/20180402-114759-vggface2.pt'
+
+    model_dir = os.path.join(get_torch_home(), 'checkpoints')
+    os.makedirs(model_dir, exist_ok=True)
+
+    cached_file = os.path.join(model_dir, os.path.basename(path))
+    if not os.path.exists(cached_file):
+        download_url_to_file(path, cached_file)
+
+    state_dict = torch.load(cached_file)
+    mdl.load_state_dict(state_dict)
+
+
+def get_torch_home():
+    torch_home = os.path.expanduser(
+        os.getenv(
+            'TORCH_HOME',
+            os.path.join(os.getenv('XDG_CACHE_HOME', '~/.cache'), 'torch')
+        )
+    )
+    return torch_home
