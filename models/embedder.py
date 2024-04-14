@@ -3,18 +3,15 @@ import os
 import torch
 from torch import nn
 from torch.nn import functional as F
-import lightning as L
 
 from .utils.download import download_url_to_file
 from networks.inceptionv1 import BasicConv2d, Block35, Block17, Mixed_6a, Mixed_7a, Block8
 
 
-class InceptionResnetEmbedding(L.LightningModule):
+class InceptionResnetEmbedding(nn.Module):
 
-    def __init__(self, dropout_prob, wandb_run):
+    def __init__(self, dropout_prob):
         super().__init__()
-
-        self.run = wandb_run
 
         self.conv2d_1a = BasicConv2d(3, 32, kernel_size=3, stride=2)
         self.conv2d_2a = BasicConv2d(32, 32, kernel_size=3, stride=1)
