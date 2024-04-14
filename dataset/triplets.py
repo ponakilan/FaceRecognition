@@ -1,10 +1,13 @@
 import os
 import random
 
+import torch
 import pandas as pd
 from torch.utils.data import Dataset
 import torchvision
 from PIL import Image
+
+from models.facerec_train import MTCNN
 
 
 def get_files_list(root_dir):
@@ -139,12 +142,15 @@ class TripletFaceDataset(Dataset):
     def __init__(self, triplets_dataframe: pd.DataFrame, transform: torchvision.transforms):
         self.dataframe = triplets_dataframe
         self.transform = transform
+        self.face_detector = MTCNN(weights_path="models/TrainedWeights").eval()
 
     def __len__(self):
         return self.dataframe.shape[0]
 
     def get_image(self, image_path):
         image = Image.open(image_path)
+        with torch.no_grad():
+            image = self.face_detector(image)[0]
         image = self.transform(image)
         return image
 
