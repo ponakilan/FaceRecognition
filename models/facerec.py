@@ -5,15 +5,14 @@ from torch.nn.functional import interpolate
 from torchvision.ops.boxes import batched_nms
 
 
-class MTCNN():
+class MTCNN:
 	def __init__(self, device=None, model=None):
 		if device is None:
 			device = 'cuda' if torch.cuda.is_available() else 'cpu'
 		self.device = device
 
-		url = 'https://github.com/deepware/dFace/raw/master/models/mtcnn.pt'
 		if model is None:
-			model = torch.hub.load_state_dict_from_url(url)
+			raise Exception("Model weights not found.")
 		else:
 			model = torch.load(model, map_location=device)
 
