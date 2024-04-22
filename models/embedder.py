@@ -12,7 +12,7 @@ class FaceNet:
 			device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 		resnet = InceptionResnetV1().to(device).eval()
-		url = 'https://github.com/deepware/dFace/raw/master/models/facenet.pt'
+		url = 'https://github.com/ponakilan/FaceRecognition/raw/master/models/TrainedWeights/facenet.pt'
 		if model is None:
 			resnet.load_state_dict(torch.hub.load_state_dict_from_url(url))
 		else:
