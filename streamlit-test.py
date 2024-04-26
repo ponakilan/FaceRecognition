@@ -28,8 +28,10 @@ embedder_weights = "models/TrainedWeights/embedder.pt"
 facerec_model = facerec.MTCNN(model=facerec_weights)
 embedder_model = embedder.FaceNet(model=embedder_weights)
 
-# Get the epsilon value and the images
-epsilon = st.slider("Minimum face size", min_value=0.1, max_value=0.9, step=0.01, value=0.25)
+# Get the epsilon, min_face_size and the images
+epsilon = st.slider("Epsilon", min_value=0.1, max_value=0.9, step=0.01, value=0.23)
+min_face_size = st.slider("Minimum face size", min_value=1, max_value=30, step=1, value=20)
+min_samples = st.slider("Minimum samples", min_value=1, max_value=10, step=1, value=1)
 uploaded = st.file_uploader("Select a photo", type=['png', 'jpg'], accept_multiple_files=True)
 
 images = []
@@ -39,9 +41,18 @@ if len(uploaded) > 0:
     for image in uploaded:
         bytes_data = image.getvalue()
         bytes_file = BytesIO(bytes_data)
+        if image.size / 1024 > 500:
+            old_image = Image.open(bytes_file).convert("RGB")
+            new_size = old_image.size[0] // 4, old_image.size[1] // 4
+            resized_image = old_image.resize(new_size)
+            old_image.close()
+            buff = BytesIO()
+            resized_image.save(buff, format='PNG', optimize=True)
+            resized_image.close()
+            bytes_file = buff
         image = Image.open(bytes_file).convert("RGB")
         images.append(np.array(image))
-        result.extend(facerec_model.detect([image]))
+        result.extend(facerec_model.detect([image], minsize=min_face_size))
 
     faces = []
     for i, res in enumerate(result):
@@ -51,7 +62,7 @@ if len(uploaded) > 0:
         boxes, probs, lands = res
         for j, box in enumerate(boxes):
             # confidence of detected face
-            if probs[j] > 0.95:
+            if probs[j] > 0.98:
                 h, w = images[i].shape[:2]
                 x1, y1, size = get_boundingbox(box, w, h)
                 face = images[i][y1:y1+size, x1:x1+size]
@@ -59,7 +70,7 @@ if len(uploaded) > 0:
 
     # Group the faces
     embeddings = embedder_model.embedding(faces)
-    dbscan = DBSCAN(eps=epsilon, metric='cosine', min_samples=1)
+    dbscan = DBSCAN(eps=epsilon, metric='cosine', min_samples=min_samples)
     labels = dbscan.fit_predict(embeddings)
 
     # Show the faces along with the labels
