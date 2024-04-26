@@ -24,7 +24,6 @@ class MTCNN:
 		self.rnet.load_state_dict(model['rnet'])
 		self.onet.load_state_dict(model['onet'])
 
-
 	def detect(self, imgs, minsize=None):
 		if len(imgs) == 0:
 			return []
@@ -229,11 +228,11 @@ def detect_face(imgs, minsize, pnet, rnet, onet, threshold, factor, device):
 	all_inds = torch.cat(all_inds, dim=0)
 
 	# NMS within each scale + image
-	pick = batched_nms(boxes[:, :4], boxes[:, 4], all_inds, 0.5)
+	pick = batched_nms(boxes[:, :4], boxes[:, 4], all_inds, 0.5).cpu()
 	boxes, image_inds = boxes[pick], image_inds[pick]
 
 	# NMS within each image
-	pick = batched_nms(boxes[:, :4], boxes[:, 4], image_inds, 0.7)
+	pick = batched_nms(boxes[:, :4], boxes[:, 4], image_inds, 0.7).cpu()
 	boxes, image_inds = boxes[pick], image_inds[pick]
 
 	regw = boxes[:, 2] - boxes[:, 0]
@@ -268,11 +267,11 @@ def detect_face(imgs, minsize, pnet, rnet, onet, threshold, factor, device):
 		score = out1[1, :]
 		ipass = score > threshold[1]
 		boxes = torch.cat((boxes[ipass, :4], score[ipass].unsqueeze(1)), dim=1)
-		image_inds = image_inds[ipass]
+		image_inds = image_inds[ipass.cpu()]
 		mv = out0[:, ipass].permute(1, 0)
 
 		# NMS within each image
-		pick = batched_nms(boxes[:, :4], boxes[:, 4], image_inds, 0.7)
+		pick = batched_nms(boxes[:, :4], boxes[:, 4], image_inds, 0.7).cpu()
 		boxes, image_inds, mv = boxes[pick], image_inds[pick], mv[pick]
 		boxes = bbreg(boxes, mv)
 		boxes = rerec(boxes)
@@ -304,7 +303,7 @@ def detect_face(imgs, minsize, pnet, rnet, onet, threshold, factor, device):
 		ipass = score > threshold[2]
 		points = points[:, ipass]
 		boxes = torch.cat((boxes[ipass, :4], score[ipass].unsqueeze(1)), dim=1)
-		image_inds = image_inds[ipass]
+		image_inds = image_inds[ipass.cpu()]
 		mv = out0[:, ipass].permute(1, 0)
 
 		w_i = boxes[:, 2] - boxes[:, 0] + 1
@@ -316,7 +315,7 @@ def detect_face(imgs, minsize, pnet, rnet, onet, threshold, factor, device):
 
 		# NMS within each image using "Min" strategy
 		# pick = batched_nms(boxes[:, :4], boxes[:, 4], image_inds, 0.7)
-		pick = batched_nms_numpy(boxes[:, :4], boxes[:, 4], image_inds, 0.7, 'Min')
+		pick = batched_nms_numpy(boxes[:, :4], boxes[:, 4], image_inds, 0.7, 'Min').cpu()
 		boxes, image_inds, points = boxes[pick], image_inds[pick], points[pick]
 
 	boxes = boxes.cpu().numpy()

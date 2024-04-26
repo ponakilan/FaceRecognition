@@ -24,7 +24,7 @@ class FaceNet:
 		for face in faces:
 			if not isinstance(face, Image.Image):
 				face = Image.fromarray(face)
-			face = TF.resize(face, (160,160))
+			face = TF.resize(face, [160, 160])
 			face = TF.to_tensor(np.float32(face))
 			face = (face - 127.5) / 128.0
 			done.append(face)
