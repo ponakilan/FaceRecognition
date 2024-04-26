@@ -5,9 +5,7 @@ import streamlit as st
 from io import BytesIO
 from sklearn.cluster import DBSCAN
 import matplotlib.pyplot as plt
-import math
 import numpy as np
-from collections import defaultdict
 
 
 def get_boundingbox(box, w, h, scale=1.2):
@@ -65,13 +63,20 @@ if len(uploaded) > 0:
     labels = dbscan.fit_predict(embeddings)
 
     # Show the faces along with the labels
-    n_rows = math.ceil(len(faces)/5)
-    n_cols = math.ceil(len(faces)/n_rows)
-    plt.figure(figsize=(16, 10))
-    for i, face in enumerate(faces):
-        plt.subplot(n_rows, n_cols, i + 1)
-        plt.title(labels[i])
-        plt.imshow(face)
+    groups = {}
+    for face, label in zip(faces, labels):
+        if label not in groups:
+            groups[label] = []
+        groups[label].append(face)
+
+    for group in groups.keys():
+        plt.figure(figsize=(3 * len(groups[group]), 2))
+        st.text(f'Class {group}')
         plt.axis('off')
-    plt.savefig("faces.png")
-    st.image("faces.png")
+        for i, face in enumerate(groups[group]):
+            plt.subplot(1, len(groups[group]), i + 1)
+            plt.imshow(face)
+            plt.axis('off')
+        plt.savefig("faces.png")
+        plt.clf()
+        st.image("faces.png")
