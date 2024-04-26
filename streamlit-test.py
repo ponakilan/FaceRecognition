@@ -89,5 +89,5 @@ if len(uploaded) > 0:
             plt.imshow(face)
             plt.axis('off')
         plt.savefig("faces.png")
-        plt.clf()
+        plt.close()
         st.image("faces.png")
