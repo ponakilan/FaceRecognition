@@ -6,6 +6,9 @@ from io import BytesIO
 from sklearn.cluster import DBSCAN
 import matplotlib.pyplot as plt
 import numpy as np
+import time
+
+st.set_page_config(page_title="Bringer - Face Grouping Test")
 
 
 def get_boundingbox(box, w, h, scale=1.2):
@@ -38,7 +41,9 @@ images = []
 if len(uploaded) > 0:
     # Detect the faces in the images
     result = []
-    for image in uploaded:
+    compression_progress = st.progress(0, text="Compressing images...")
+    n_images = len(uploaded)
+    for i, image in enumerate(uploaded):
         bytes_data = image.getvalue()
         bytes_file = BytesIO(bytes_data)
         if image.size / 1024 > 500:
@@ -53,32 +58,41 @@ if len(uploaded) > 0:
         image = Image.open(bytes_file).convert("RGB")
         images.append(np.array(image))
         result.extend(facerec_model.detect([image], minsize=min_face_size))
+        compression_progress.progress(int(((i + 1) / n_images)*100), text="Compressing images...")
+    time.sleep(1)
+    compression_progress.empty()
 
+    start = time.time()
     faces = []
-    for i, res in enumerate(result):
-        if res is None:
-            continue
-        # extract faces
-        boxes, probs, lands = res
-        for j, box in enumerate(boxes):
-            # confidence of detected face
-            if probs[j] > 0.98:
-                h, w = images[i].shape[:2]
-                x1, y1, size = get_boundingbox(box, w, h)
-                face = images[i][y1:y1+size, x1:x1+size]
-                faces.append(face)
+    with st.spinner("Detecting faces..."):
+        for i, res in enumerate(result):
+            if res is None:
+                continue
+            # extract faces
+            boxes, probs, lands = res
+            for j, box in enumerate(boxes):
+                # confidence of detected face
+                if probs[j] > 0.98:
+                    h, w = images[i].shape[:2]
+                    x1, y1, size = get_boundingbox(box, w, h)
+                    face = images[i][y1:y1+size, x1:x1+size]
+                    faces.append(face)
 
-    # Group the faces
-    embeddings = embedder_model.embedding(faces)
-    dbscan = DBSCAN(eps=epsilon, metric='cosine', min_samples=min_samples)
-    labels = dbscan.fit_predict(embeddings)
-
-    # Show the faces along with the labels
     groups = {}
-    for face, label in zip(faces, labels):
-        if label not in groups:
-            groups[label] = []
-        groups[label].append(face)
+    with st.spinner("Clustering the faces..."):
+        # Group the faces
+        embeddings = embedder_model.embedding(faces)
+        dbscan = DBSCAN(eps=epsilon, metric='cosine', min_samples=min_samples)
+        labels = dbscan.fit_predict(embeddings)
+
+        # Show the faces along with the labels
+        for face, label in zip(faces, labels):
+            if label not in groups:
+                groups[label] = []
+            groups[label].append(face)
+    end = time.time()
+
+    st.text(f"Processed {len(faces)} faces in {end - start} seconds.")
 
     for group in groups.keys():
         plt.figure(figsize=(3 * len(groups[group]), 2))
