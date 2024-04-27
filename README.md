@@ -1,6 +1,6 @@
 # FaceRecognition
 
-FaceRecognition is a lightweight face detection and verification module built for *Bringer - An AI based photo sharing platform*. <br>
+FaceRecognition is a lightweight face detection and verification module built by **Tech-E** for **Bringer - An AI based photo sharing platform**. <br>
 It uses the MTCNN architecture trained on a custom dataset for face detection, and an InceptionResnet-based architecture to generate face embeddings for face verification and clustering. The InceptionResnet-based model is trained using `TripletMarginLoss` to generate face embeddings.
 
 ## Getting Started
